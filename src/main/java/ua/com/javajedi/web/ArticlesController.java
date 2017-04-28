@@ -1,0 +1,85 @@
+package ua.com.javajedi.web;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.servlet.ModelAndView;
+import ua.com.javajedi.model.Article;
+import ua.com.javajedi.model.Role;
+import ua.com.javajedi.model.User;
+import ua.com.javajedi.model.comment.ArticleComment;
+import ua.com.javajedi.service.ArticleCommentService;
+import ua.com.javajedi.service.ArticleService;
+
+import java.util.List;
+
+
+@Controller
+public class ArticlesController {
+    private ArticleService articleService;
+    private ArticleCommentService articleCommentService;
+
+    @GetMapping(value = "/articles/all")
+    public ModelAndView findAllArticles(ModelAndView mav){
+
+        mav.addObject("articles", articleService.findAll());
+
+        if (getCurrentUser().getAuthorities().contains(Role.ADMIN)){
+            mav.setViewName("adminCabinet");
+            return mav;
+        }
+
+        mav.setViewName("cabinet");
+        return mav;
+    }
+
+    @GetMapping(value = "/articles/unread")
+    public ModelAndView findAllUnread(ModelAndView mav){
+
+        User user = getCurrentUser();
+
+        mav.addObject("unread", articleService.findAllUnread(user.getUserId()));
+
+        if (user.getAuthorities().contains(Role.ADMIN)){
+            mav.setViewName("adminCabinet");
+            return mav;
+        }
+
+        mav.setViewName("cabinet");
+        return mav;
+    }
+
+    @GetMapping(value = "/articles/findByTitle")
+    public ModelAndView findByTitle(String title,
+                                    ModelAndView mav){
+
+        Article article = articleService.findByTitle(title, getCurrentUser());
+        List<ArticleComment> comments = articleCommentService.findAllByArticleId(article.getArticleId());
+
+        mav.addObject("user", getCurrentUser());
+        mav.addObject("articleByTitle", article);
+        mav.addObject("articleComments", comments);
+
+
+
+        mav.setViewName("cabinet");
+        return mav;
+    }
+
+    @Autowired
+    public void setArticleService(ArticleService articleService){
+        this.articleService = articleService;
+    }
+
+    @Autowired
+    public void setArticleCommentService(ArticleCommentService articleCommentService){
+        this.articleCommentService = articleCommentService;
+    }
+
+    private User getCurrentUser(){
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+}

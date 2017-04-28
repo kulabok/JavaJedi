@@ -1,0 +1,36 @@
+
+body{
+    margin: auto;
+    width: 1024px;
+    background-color: #fffdf5;
+}
+#entrance{
+    text-align: center;
+    background-color: #ffe016;
+    color:black;
+}
+
+#welcomeText{
+    text-align: center;
+}
+#rock{
+    /*color: #ff111a;*/
+}
+
+/*
+ul {
+    margin: 0; !* Обнуляем значение отступов *!
+    padding: 4px; !* Значение полей *!
+}
+li {
+    display: inline-block; !* Отображать как строчный элемент *!
+    margin-right: 5px; !* Отступ слева *!
+    border: 1px solid #000; !* Рамка вокруг текста *!
+    padding: 3px; !* Поля вокруг текста *!
+}
+*/
+
+table{
+    align-self: center;
+    align-content: center;
+}
