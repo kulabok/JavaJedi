@@ -1,6 +1,7 @@
 package ua.com.javajedi.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -40,6 +41,7 @@ public class AuthorizationController {
     }
 
     @GetMapping(value = "/login")
+    @Secured({"USER", "ADMIN"})
     public ModelAndView login(@RequestParam(value = "logout", required = false) String logout,
                               @RequestParam(value = "error", required = false) String error){
         ModelAndView mav = new ModelAndView();

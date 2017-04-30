@@ -1,6 +1,7 @@
 package ua.com.javajedi.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,7 @@ public class ArticleCommentsController {
     private ArticleCommentService articleCommentService;
 
     @PostMapping(value = "/comments/addComment")
+    @Secured({"USER", "ADMIN"})
     public ModelAndView addComment(String userId,
                                    String articleId,
                                    String content,
@@ -39,10 +41,6 @@ public class ArticleCommentsController {
         mav.addObject("articleByTitle", article);
         mav.addObject("articleComments", comments);
 
-        if (user.getAuthorities().contains(Role.ADMIN)){
-            mav.setViewName("adminCabinet");
-            return mav;
-        }
         mav.setViewName("cabinet");
         return mav;
 

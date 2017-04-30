@@ -1,6 +1,7 @@
 package ua.com.javajedi.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,7 @@ public class ArticlesController {
     private ArticleCommentService articleCommentService;
 
     @GetMapping(value = "/articles/all")
+    @Secured({"USER", "ADMIN"})
     public ModelAndView findAllArticles(ModelAndView mav){
 
         mav.addObject("articles", articleService.findAll());
@@ -37,22 +39,19 @@ public class ArticlesController {
     }
 
     @GetMapping(value = "/articles/unread")
+    @Secured({"USER", "ADMIN"})
     public ModelAndView findAllUnread(ModelAndView mav){
 
         User user = getCurrentUser();
 
         mav.addObject("unread", articleService.findAllUnread(user.getUserId()));
 
-        if (user.getAuthorities().contains(Role.ADMIN)){
-            mav.setViewName("adminCabinet");
-            return mav;
-        }
-
         mav.setViewName("cabinet");
         return mav;
     }
 
     @GetMapping(value = "/articles/findByTitle")
+    @Secured({"USER", "ADMIN"})
     public ModelAndView findByTitle(String title,
                                     ModelAndView mav){
 
@@ -62,8 +61,6 @@ public class ArticlesController {
         mav.addObject("user", getCurrentUser());
         mav.addObject("articleByTitle", article);
         mav.addObject("articleComments", comments);
-
-
 
         mav.setViewName("cabinet");
         return mav;

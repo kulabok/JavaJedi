@@ -1,6 +1,7 @@
 package ua.com.javajedi.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ public class AnswerController {
     private AnswerService answerService;
 
     @PostMapping(value = "/resolveAnswer")
+    @Secured({"USER", "ADMIN"})
     public ModelAndView resolve(String answer,
                                 String exerciseId,
                                 ModelAndView mav){
@@ -27,10 +29,6 @@ public class AnswerController {
         mav.addObject("exercises", exerciseService.findAll());
         mav.addObject("message", message);
 
-        if (user.getAuthorities().contains(Role.ADMIN)){
-            mav.setViewName("adminCabinet");
-            return mav;
-        }
         mav.setViewName("cabinet");
         return mav;
     }

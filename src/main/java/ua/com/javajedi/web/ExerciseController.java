@@ -1,6 +1,7 @@
 package ua.com.javajedi.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,34 +21,29 @@ public class ExerciseController {
     private AnswerService answerService;
 
     @GetMapping(value = "/exercises/all")
+    @Secured({"USER", "ADMIN"})
     public ModelAndView findAllExercises(ModelAndView mav){
 
         mav.addObject("exercises", exerciseService.findAll());
 
-        if (getCurrentUser().getAuthorities().contains(Role.ADMIN)){
-            mav.setViewName("adminCabinet");
-            return mav;
-        }
         mav.setViewName("cabinet");
         return mav;
     }
 
     @GetMapping(value = "exercises/undone")
+    @Secured({"USER", "ADMIN"})
     public ModelAndView findAllUndone(ModelAndView mav){
 
         User user = getCurrentUser();
 
         mav.addObject("undone", exerciseService.findAllUndone(user.getUserId()));
 
-        if (user.getAuthorities().contains(Role.ADMIN)){
-            mav.setViewName("adminCabinet");
-            return mav;
-        }
         mav.setViewName("cabinet");
         return mav;
     }
 
     @GetMapping(value = "/exercise/findByTitle")
+    @Secured({"USER", "ADMIN"})
     public ModelAndView findByTitle(String title,
                                     ModelAndView mav){
         Exercise exercise = exerciseService.findByTitle(title);
@@ -55,10 +51,6 @@ public class ExerciseController {
         mav.addObject("exercise", exercise);
         mav.addObject("answers", answerService.findAllByExerciseId(exercise.getExerciseId()));
 
-        if (getCurrentUser().getAuthorities().contains(Role.ADMIN)){
-            mav.setViewName("adminCabinet");
-            return mav;
-        }
         mav.setViewName("cabinet");
         return mav;
     }
