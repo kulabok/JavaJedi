@@ -29,6 +29,10 @@ public class AnswerController {
         mav.addObject("exercises", exerciseService.findAll());
         mav.addObject("message", message);
 
+        if (user.getAuthorities().contains(Role.ADMIN)){
+            mav.addObject("admin", "You are admin!");
+        }
+
         mav.setViewName("cabinet");
         return mav;
     }

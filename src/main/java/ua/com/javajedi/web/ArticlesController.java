@@ -30,8 +30,7 @@ public class ArticlesController {
         mav.addObject("articles", articleService.findAll());
 
         if (getCurrentUser().getAuthorities().contains(Role.ADMIN)){
-            mav.setViewName("adminCabinet");
-            return mav;
+            mav.addObject("admin", "You are admin!");
         }
 
         mav.setViewName("cabinet");
@@ -46,6 +45,10 @@ public class ArticlesController {
 
         mav.addObject("unread", articleService.findAllUnread(user.getUserId()));
 
+        if (user.getAuthorities().contains(Role.ADMIN)){
+            mav.addObject("admin", "You are admin!");
+        }
+
         mav.setViewName("cabinet");
         return mav;
     }
@@ -57,10 +60,15 @@ public class ArticlesController {
 
         Article article = articleService.findByTitle(title, getCurrentUser());
         List<ArticleComment> comments = articleCommentService.findAllByArticleId(article.getArticleId());
+        User user = getCurrentUser();
 
-        mav.addObject("user", getCurrentUser());
+        mav.addObject("user", user);
         mav.addObject("articleByTitle", article);
         mav.addObject("articleComments", comments);
+
+        if (user.getAuthorities().contains(Role.ADMIN)){
+            mav.addObject("admin", "You are admin!");
+        }
 
         mav.setViewName("cabinet");
         return mav;

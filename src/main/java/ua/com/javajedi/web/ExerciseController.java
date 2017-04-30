@@ -26,6 +26,10 @@ public class ExerciseController {
 
         mav.addObject("exercises", exerciseService.findAll());
 
+        if (getCurrentUser().getAuthorities().contains(Role.ADMIN)){
+            mav.addObject("admin", "You are admin!");
+        }
+
         mav.setViewName("cabinet");
         return mav;
     }
@@ -37,6 +41,10 @@ public class ExerciseController {
         User user = getCurrentUser();
 
         mav.addObject("undone", exerciseService.findAllUndone(user.getUserId()));
+
+        if (user.getAuthorities().contains(Role.ADMIN)){
+            mav.addObject("admin", "You are admin!");
+        }
 
         mav.setViewName("cabinet");
         return mav;
@@ -50,6 +58,10 @@ public class ExerciseController {
 
         mav.addObject("exercise", exercise);
         mav.addObject("answers", answerService.findAllByExerciseId(exercise.getExerciseId()));
+
+        if (getCurrentUser().getAuthorities().contains(Role.ADMIN)){
+            mav.addObject("admin", "You are admin!");
+        }
 
         mav.setViewName("cabinet");
         return mav;

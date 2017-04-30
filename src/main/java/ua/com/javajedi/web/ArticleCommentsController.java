@@ -41,6 +41,10 @@ public class ArticleCommentsController {
         mav.addObject("articleByTitle", article);
         mav.addObject("articleComments", comments);
 
+        if (user.getAuthorities().contains(Role.ADMIN)){
+            mav.addObject("admin", "You are admin!");
+        }
+
         mav.setViewName("cabinet");
         return mav;
 
