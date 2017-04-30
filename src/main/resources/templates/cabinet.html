@@ -34,6 +34,10 @@
         <H4 data-th-text="${message}">Message</H4>
     </div>
 
+    <div data-th-if="${admin != null}">
+        <H4 data-th-text="${admin}">Message</H4>
+    </div>
+
     <div>
         <ul class="nav nav-tabs" >
             <li role="presentation" class="active"><a href="#">Home</a></li>
