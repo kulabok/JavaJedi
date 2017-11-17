@@ -11,73 +11,70 @@ import java.util.List;
 
 @Service
 public class ArticleServiceImpl implements ArticleService {
-    private ArticleRepository articleRepository;
-    private UserServiceDB userService;
+	private final ArticleRepository articleRepository;
+	private final UserServiceDB userService;
 
-    @Override
-    public Article add(Article article) {
-        return articleRepository.saveAndFlush(article);
-    }
+	@Autowired
+	public ArticleServiceImpl(final ArticleRepository articleRepository,
+	                          final UserServiceDB userService) {
+		this.articleRepository = articleRepository;
+		this.userService = userService;
+	}
 
-    @Override
-    public Article update(Article article) {
-        return articleRepository.saveAndFlush(article);
-    }
+	@Override
+	public Article add(Article article) {
+		return articleRepository.saveAndFlush(article);
+	}
 
-    @Override
-    public Article delete(Article article) {
-        articleRepository.delete(article.getArticleId());
-        return article;
-    }
+	@Override
+	public Article update(Article article) {
+		return articleRepository.saveAndFlush(article);
+	}
 
-    @Override
-    public Article findById(long articleId) {
-        return articleRepository.findOne(articleId);
-    }
+	@Override
+	public Article delete(Article article) {
+		articleRepository.delete(article.getArticleId());
+		return article;
+	}
 
-    @Override
-    public List<Article> findAll() {
-        return articleRepository.findAll();
-    }
+	@Override
+	public Article findById(long articleId) {
+		return articleRepository.findOne(articleId);
+	}
 
-    @Override
-    public List<Article> findAllUnread(long userId) {
-        List<Article> articles = articleRepository.findAllUnread(userId);
+	@Override
+	public List<Article> findAll() {
+		return articleRepository.findAll();
+	}
 
-        if (articles == null){
-            return new ArrayList<>();
-        }
-        return articles;
-    }
+	@Override
+	public List<Article> findAllUnread(long userId) {
+		List<Article> articles = articleRepository.findAllUnread(userId);
 
-    @Override
-    public Article findByTitle(String title, User user) {
-        Article article = articleRepository.findByTitle(title);
-        List<Article> alreadyRead = findAllAlreadyRead(user.getUserId());
-        alreadyRead.add(article);
-        user.setAlreadyRead(alreadyRead);
-        userService.update(user);
+		if (articles == null) {
+			return new ArrayList<>();
+		}
+		return articles;
+	}
 
-        return article;
-    }
+	@Override
+	public Article findByTitle(String title, User user) {
+		Article article = articleRepository.findByTitle(title);
+		List<Article> alreadyRead = findAllAlreadyRead(user.getUserId());
+		alreadyRead.add(article);
+		user.setAlreadyRead(alreadyRead);
+		userService.update(user);
 
-    @Override
-    public List<Article> findAllAlreadyRead(long userId) {
-        return articleRepository.findAllAlreadyRead(userId);
-    }
+		return article;
+	}
 
-    @Override
-    public long articlesCount() {
-        return articleRepository.articlesCount();
-    }
+	@Override
+	public List<Article> findAllAlreadyRead(long userId) {
+		return articleRepository.findAllAlreadyRead(userId);
+	}
 
-    @Autowired
-    public void setArticleRepository(ArticleRepository articleRepository){
-        this.articleRepository = articleRepository;
-    }
-
-    @Autowired
-    public void setUserService(UserServiceDB userService){
-        this.userService = userService;
-    }
+	@Override
+	public long articlesCount() {
+		return articleRepository.articlesCount();
+	}
 }

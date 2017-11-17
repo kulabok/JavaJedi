@@ -9,8 +9,8 @@ import ua.com.javajedi.model.comment.ArticleComment;
 import java.util.List;
 
 @Repository
-public interface ArticleCommentRepository extends JpaRepository<ArticleComment, Long>{
+public interface ArticleCommentRepository extends JpaRepository<ArticleComment, Long> {
 
-    @Query(value = "SELECT * FROM article_comment WHERE article_id = ?1", nativeQuery = true)
-    List<ArticleComment> findAllByArticleId(@Param("articleId") long articleId);
+	@Query(value = "SELECT * FROM article_comment WHERE article_id = ?1", nativeQuery = true)
+	List<ArticleComment> findAllByArticleId(@Param("articleId") long articleId);
 }

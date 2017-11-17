@@ -8,42 +8,48 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.javajedi.model.Role;
 import ua.com.javajedi.model.User;
+import ua.com.javajedi.model.statistics.Action;
+import ua.com.javajedi.model.statistics.Page;
 import ua.com.javajedi.service.AnswerService;
 import ua.com.javajedi.service.ExerciseService;
+import ua.com.javajedi.service.StatisticsService;
+import ua.com.javajedi.utils.StatUtils;
 
 @Controller
 public class AnswerController {
-    private ExerciseService exerciseService;
-    private AnswerService answerService;
+	private final ExerciseService exerciseService;
+	private final AnswerService answerService;
+	private final StatisticsService statisticsService;
 
-    @PostMapping(value = "/resolveAnswer")
-    @Secured({"USER", "ADMIN"})
-    public ModelAndView resolve(String answer,
-                                String exerciseId,
-                                ModelAndView mav){
+	@Autowired
+	public AnswerController(final ExerciseService exerciseService,
+	                        final AnswerService answerService,
+	                        final StatisticsService statisticsService) {
+		this.exerciseService = exerciseService;
+		this.answerService = answerService;
+		this.statisticsService = statisticsService;
+	}
 
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String message = answerService.resolveAnswer(exerciseId, answer, user);
+	@PostMapping(value = "/resolveAnswer")
+	@Secured({"USER", "ADMIN"})
+	public ModelAndView resolve(String answer,
+	                            String exerciseId,
+	                            ModelAndView mav) {
 
-        mav.addObject("user", user);
-        mav.addObject("exercises", exerciseService.findAll());
-        mav.addObject("message", message);
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String message = answerService.resolveAnswer(exerciseId, answer, user);
 
-        if (user.getAuthorities().contains(Role.ADMIN)){
-            mav.addObject("admin", "You are admin!");
-        }
+		mav.addObject("user", user);
+		mav.addObject("exercises", exerciseService.findAll());
+		mav.addObject("message", message);
 
-        mav.setViewName("cabinet");
-        return mav;
-    }
+		if (user.getAuthorities().contains(Role.ADMIN)) {
+			mav.addObject("admin", "You are admin!");
+		}
 
-    @Autowired
-    public void setExerciseService(ExerciseService exerciseService){
-        this.exerciseService = exerciseService;
-    }
+		mav.setViewName("cabinet");
+		statisticsService.save(StatUtils.createStatistics(Page.CABINET, Action.TRY_EXERCISE));
+		return mav;
+	}
 
-    @Autowired
-    public void setAnswerService(AnswerService answerService){
-        this.answerService = answerService;
-    }
 }

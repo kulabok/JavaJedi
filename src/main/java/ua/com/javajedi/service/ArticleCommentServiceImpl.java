@@ -11,69 +11,63 @@ import java.util.List;
 
 @Service
 public class ArticleCommentServiceImpl implements ArticleCommentService {
-    private ArticleCommentRepository articleCommentRepository;
-    private UserServiceDB userServiceDB;
-    private ArticleService articleService;
+	private final ArticleCommentRepository articleCommentRepository;
+	private final UserServiceDB userServiceDB;
+	private final ArticleService articleService;
 
-    @Autowired
-    public void setArticleRepository(ArticleCommentRepository articleRepository){
-        this.articleCommentRepository = articleRepository;
-    }
+	@Autowired
+	public ArticleCommentServiceImpl(final ArticleCommentRepository articleRepository,
+	                                 final UserServiceDB userServiceDB,
+	                                 final ArticleService articleService) {
+		this.articleCommentRepository = articleRepository;
+		this.userServiceDB = userServiceDB;
+		this.articleService = articleService;
+	}
 
-    @Autowired
-    public void setUserServiceDB(UserServiceDB userServiceDB){
-        this.userServiceDB = userServiceDB;
-    }
+	@Override
+	public ArticleComment add(ArticleComment articleComment) {
+		return articleCommentRepository.saveAndFlush(articleComment);
+	}
 
-    @Autowired
-    public void setArticleService(ArticleService articleService){
-        this.articleService = articleService;
-    }
+	@Override
+	public ArticleComment add(String userId, long articleId, String content) {
+		ArticleComment comment = new ArticleComment();
+		comment.setAuthor(userServiceDB.findById(Long.parseLong(userId)));
+		comment.setArticle(articleService.findById(articleId));
+		comment.setContent(content);
+		comment.setDate(Calendar.getInstance().getTime());
+		return articleCommentRepository.saveAndFlush(comment);
+	}
 
-    @Override
-    public ArticleComment add(ArticleComment articleComment) {
-        return articleCommentRepository.saveAndFlush(articleComment);
-    }
+	@Override
+	public ArticleComment update(ArticleComment articleComment) {
+		return articleCommentRepository.saveAndFlush(articleComment);
+	}
 
-    @Override
-    public ArticleComment add(String userId, long articleId, String content) {
-        ArticleComment comment = new ArticleComment();
-        comment.setAuthor(userServiceDB.findById(Long.parseLong(userId)));
-        comment.setArticle(articleService.findById(articleId));
-        comment.setContent(content);
-        comment.setDate(Calendar.getInstance().getTime());
-        return articleCommentRepository.saveAndFlush(comment);
-    }
+	@Override
+	public ArticleComment delete(long articleId) {
+		articleCommentRepository.delete(articleId);
+		return articleCommentRepository.findOne(articleId);
+	}
 
-    @Override
-    public ArticleComment update(ArticleComment articleComment) {
-        return articleCommentRepository.saveAndFlush(articleComment);
-    }
+	@Override
+	public ArticleComment findById(ArticleComment articleComment) {
+		return articleCommentRepository.findOne(articleComment.getaCommentId());
+	}
 
-    @Override
-    public ArticleComment delete(long articleId) {
-        articleCommentRepository.delete(articleId);
-        return articleCommentRepository.findOne(articleId);
-    }
+	@Override
+	public List<ArticleComment> findAll() {
+		return articleCommentRepository.findAll();
+	}
 
-    @Override
-    public ArticleComment findById(ArticleComment articleComment) {
-        return articleCommentRepository.findOne(articleComment.getaCommentId());
-    }
+	@Override
+	public List<ArticleComment> findAllByArticleId(long articleId) {
+		List<ArticleComment> comments = articleCommentRepository.findAllByArticleId(articleId);
 
-    @Override
-    public List<ArticleComment> findAll() {
-        return articleCommentRepository.findAll();
-    }
+		if (comments == null) {
+			return new ArrayList<>();
+		}
 
-    @Override
-    public List<ArticleComment> findAllByArticleId(long articleId) {
-        List<ArticleComment> comments = articleCommentRepository.findAllByArticleId(articleId);
-
-        if (comments == null){
-            return new ArrayList<>();
-        }
-
-        return comments;
-    }
+		return comments;
+	}
 }

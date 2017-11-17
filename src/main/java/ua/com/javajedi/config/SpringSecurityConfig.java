@@ -14,39 +14,37 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
-    //Setter autowiring doesn't work time after time :(
-    @Autowired
-    private UserDetailsService userDetailsService;
+	private final UserDetailsService userDetailsService;
 
-    @Autowired
-    public void setUserDetailService(UserDetailsService userDetailsService){
-        this.userDetailsService = userDetailsService;
-    }
+	@Autowired
+	public SpringSecurityConfig(final UserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
+	}
 
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
-                .authorizeRequests()
-                    .antMatchers("/").permitAll()
-                    .anyRequest().authenticated()
-                    .and()
-                .formLogin()
-                    .loginPage("/").permitAll()
-                    .defaultSuccessUrl("/login")
-                    .and()
-                .logout().permitAll().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
+	@Override
+	public void configure(HttpSecurity http) throws Exception {
+		http
+			.authorizeRequests()
+			.antMatchers("/").permitAll()
+			.anyRequest().authenticated()
+			.and()
+			.formLogin()
+			.loginPage("/").permitAll()
+			.defaultSuccessUrl("/login")
+			.and()
+			.logout().permitAll().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 
-    }
+	}
 
-    //TODO To uncomment i need to add password encryption everywhere in DAO where it can be found.
-    /*@Bean
+	//TODO To uncomment i need to add password encryption everywhere in DAO where it can be found.
+	  /*@Bean
     public PasswordEncoder bcryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }*/
 
-    @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception{
-        auth.userDetailsService(userDetailsService)
+	@Autowired
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService)
                 /*.passwordEncoder(bcryptPasswordEncoder())*/;
-    }
+	}
 }

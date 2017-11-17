@@ -5,17 +5,21 @@ import ua.com.javajedi.model.Exercise;
 import java.util.List;
 
 public interface ExerciseService {
-    Exercise add(Exercise exercise);
-    Exercise update(Exercise exercise);
-    Exercise delete(Exercise exercise);
-    Exercise findById(long id);
-    List<Exercise> findAll();
+	Exercise add(Exercise exercise);
 
-    long exercisesCount();
+	Exercise update(Exercise exercise);
 
-    Exercise findByTitle(String title);
+	Exercise delete(Exercise exercise);
 
-    List<Exercise> findAllDone(long userId);
+	Exercise findById(long id);
 
-    List<Exercise> findAllUndone(long userId);
+	List<Exercise> findAll();
+
+	long exercisesCount();
+
+	Exercise findByTitle(String title);
+
+	List<Exercise> findAllDone(long userId);
+
+	List<Exercise> findAllUndone(long userId);
 }

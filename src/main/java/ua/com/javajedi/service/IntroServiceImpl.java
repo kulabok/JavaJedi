@@ -5,25 +5,23 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class IntroServiceImpl implements IntroService {
-    private ArticleService articleService;
-    private ExerciseService exerciseService;
-    @Override
-    public long findArticlesCount() {
-        return articleService.articlesCount();
-    }
+	private final ArticleService articleService;
+	private final ExerciseService exerciseService;
 
-    @Override
-    public long findExercisesCount() {
-        return exerciseService.exercisesCount();
-    }
+	@Autowired
+	public IntroServiceImpl(final ArticleService articleService, final ExerciseService exerciseService) {
+		this.articleService = articleService;
+		this.exerciseService = exerciseService;
+	}
 
-    @Autowired
-    public void setArticleService(ArticleService articleService){
-        this.articleService = articleService;
-    }
+	@Override
+	public long findArticlesCount() {
+		return articleService.articlesCount();
+	}
 
-    @Autowired
-    public void setExerciseService(ExerciseService exerciseService){
-        this.exerciseService = exerciseService;
-    }
+	@Override
+	public long findExercisesCount() {
+		return exerciseService.exercisesCount();
+	}
+
 }

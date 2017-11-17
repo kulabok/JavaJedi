@@ -12,79 +12,75 @@ import ua.com.javajedi.model.Article;
 import ua.com.javajedi.model.Role;
 import ua.com.javajedi.model.User;
 import ua.com.javajedi.model.comment.ArticleComment;
+import ua.com.javajedi.model.statistics.Action;
+import ua.com.javajedi.model.statistics.Page;
 import ua.com.javajedi.service.ArticleCommentService;
 import ua.com.javajedi.service.ArticleService;
+import ua.com.javajedi.service.StatisticsService;
+import ua.com.javajedi.utils.StatUtils;
 
 import java.util.List;
 
 
 @Controller
 public class ArticlesController {
-    private ArticleService articleService;
-    private ArticleCommentService articleCommentService;
+	private final ArticleService articleService;
+	private final ArticleCommentService articleCommentService;
+	private final StatisticsService statisticsService;
 
-    @GetMapping(value = "/articles/all")
-    @Secured({"USER", "ADMIN"})
-    public ModelAndView findAllArticles(ModelAndView mav){
+	@Autowired
+	public ArticlesController(final ArticleService articleService,
+	                          final ArticleCommentService articleCommentService,
+	                          final StatisticsService statisticsService) {
+		this.articleService = articleService;
+		this.articleCommentService = articleCommentService;
+		this.statisticsService = statisticsService;
+	}
 
-        mav.addObject("articles", articleService.findAll());
+	@GetMapping(value = "/articles/all")
+	@Secured({"USER", "ADMIN"})
+	public ModelAndView findAllArticles(ModelAndView mav) {
+		mav.addObject("articles", articleService.findAll());
+		if (getCurrentUser().getAuthorities().contains(Role.ADMIN)) {
+			mav.addObject("admin", "You are admin!");
+		}
+		mav.setViewName("cabinet");
+		statisticsService.save(StatUtils.createStatistics(Page.CABINET, Action.GET_ARTICLES_ALL));
+		return mav;
+	}
 
-        if (getCurrentUser().getAuthorities().contains(Role.ADMIN)){
-            mav.addObject("admin", "You are admin!");
-        }
+	@GetMapping(value = "/articles/unread")
+	@Secured({"USER", "ADMIN"})
+	public ModelAndView findAllUnread(ModelAndView mav) {
+		User user = getCurrentUser();
+		mav.addObject("unread", articleService.findAllUnread(user.getUserId()));
+		if (user.getAuthorities().contains(Role.ADMIN)) {
+			mav.addObject("admin", "You are admin!");
+		}
+		mav.setViewName("cabinet");
+		statisticsService.save(StatUtils.createStatistics(Page.CABINET, Action.GET_ARTICLES_UNREAD));
+		return mav;
+	}
 
-        mav.setViewName("cabinet");
-        return mav;
-    }
+	@GetMapping(value = "/articles/findByTitle")
+	@Secured({"USER", "ADMIN"})
+	public ModelAndView findByTitle(String title,
+	                                ModelAndView mav) {
+		Article article = articleService.findByTitle(title, getCurrentUser());
+		List<ArticleComment> comments = articleCommentService.findAllByArticleId(article.getArticleId());
+		User user = getCurrentUser();
+		mav.addObject("user", user);
+		mav.addObject("articleByTitle", article);
+		mav.addObject("articleComments", comments);
+		if (user.getAuthorities().contains(Role.ADMIN)) {
+			mav.addObject("admin", "You are admin!");
+		}
+		mav.setViewName("cabinet");
+		statisticsService.save(StatUtils.createStatistics(Page.CABINET, Action.READ_ARTICLE));
+		return mav;
+	}
 
-    @GetMapping(value = "/articles/unread")
-    @Secured({"USER", "ADMIN"})
-    public ModelAndView findAllUnread(ModelAndView mav){
-
-        User user = getCurrentUser();
-
-        mav.addObject("unread", articleService.findAllUnread(user.getUserId()));
-
-        if (user.getAuthorities().contains(Role.ADMIN)){
-            mav.addObject("admin", "You are admin!");
-        }
-
-        mav.setViewName("cabinet");
-        return mav;
-    }
-
-    @GetMapping(value = "/articles/findByTitle")
-    @Secured({"USER", "ADMIN"})
-    public ModelAndView findByTitle(String title,
-                                    ModelAndView mav){
-
-        Article article = articleService.findByTitle(title, getCurrentUser());
-        List<ArticleComment> comments = articleCommentService.findAllByArticleId(article.getArticleId());
-        User user = getCurrentUser();
-
-        mav.addObject("user", user);
-        mav.addObject("articleByTitle", article);
-        mav.addObject("articleComments", comments);
-
-        if (user.getAuthorities().contains(Role.ADMIN)){
-            mav.addObject("admin", "You are admin!");
-        }
-
-        mav.setViewName("cabinet");
-        return mav;
-    }
-
-    @Autowired
-    public void setArticleService(ArticleService articleService){
-        this.articleService = articleService;
-    }
-
-    @Autowired
-    public void setArticleCommentService(ArticleCommentService articleCommentService){
-        this.articleCommentService = articleCommentService;
-    }
-
-    private User getCurrentUser(){
-        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
+	private User getCurrentUser() {
+		return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	}
 }

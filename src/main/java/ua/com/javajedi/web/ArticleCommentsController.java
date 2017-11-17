@@ -13,50 +13,50 @@ import ua.com.javajedi.model.Article;
 import ua.com.javajedi.model.Role;
 import ua.com.javajedi.model.User;
 import ua.com.javajedi.model.comment.ArticleComment;
+import ua.com.javajedi.model.statistics.Action;
+import ua.com.javajedi.model.statistics.Page;
 import ua.com.javajedi.service.ArticleCommentService;
 import ua.com.javajedi.service.ArticleService;
+import ua.com.javajedi.service.StatisticsService;
+import ua.com.javajedi.utils.StatUtils;
 
 import java.util.List;
 
 @Controller
 public class ArticleCommentsController {
-    private ArticleService articleService;
-    private ArticleCommentService articleCommentService;
+	private final ArticleService articleService;
+	private final ArticleCommentService articleCommentService;
+	private final StatisticsService statisticsService;
 
-    @PostMapping(value = "/comments/addComment")
-    @Secured({"USER", "ADMIN"})
-    public ModelAndView addComment(String userId,
-                                   String articleId,
-                                   String content,
-                                   ModelAndView mav){
+	@Autowired
+	public ArticleCommentsController(final ArticleCommentService articleCommentService,
+	                                 final ArticleService articleService,
+	                                 final StatisticsService statisticsService) {
+		this.articleCommentService = articleCommentService;
+		this.articleService = articleService;
+		this.statisticsService = statisticsService;
+	}
 
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	@PostMapping(value = "/comments/addComment")
+	@Secured({"USER", "ADMIN"})
+	public ModelAndView addComment(String userId,
+	                               String articleId,
+	                               String content,
+	                               ModelAndView mav) {
+		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		long id = Long.parseLong(articleId);
+		articleCommentService.add(userId, id, content);
+		Article article = articleService.findById(id);
+		List<ArticleComment> comments = articleCommentService.findAllByArticleId(id);
+		mav.addObject("user", user);
+		mav.addObject("articleByTitle", article);
+		mav.addObject("articleComments", comments);
+		if (user.getAuthorities().contains(Role.ADMIN)) {
+			mav.addObject("admin", "You are admin!");
+		}
+		mav.setViewName("cabinet");
+		statisticsService.save(StatUtils.createStatistics(Page.CABINET, Action.ADD_COMMENT));
+		return mav;
+	}
 
-        long id = Long.parseLong(articleId);
-        articleCommentService.add(userId, id, content);
-        Article article = articleService.findById(id);
-        List<ArticleComment> comments = articleCommentService.findAllByArticleId(id);
-
-        mav.addObject("user", user);
-        mav.addObject("articleByTitle", article);
-        mav.addObject("articleComments", comments);
-
-        if (user.getAuthorities().contains(Role.ADMIN)){
-            mav.addObject("admin", "You are admin!");
-        }
-
-        mav.setViewName("cabinet");
-        return mav;
-
-    }
-
-    @Autowired
-    public void setArticleCommentService(ArticleCommentService articleCommentService){
-        this.articleCommentService = articleCommentService;
-    }
-
-    @Autowired
-    public void setArticleService(ArticleService articleService){
-        this.articleService = articleService;
-    }
 }

@@ -12,10 +12,10 @@ import ua.com.javajedi.model.User;
 public class UserService implements UserDetailsService{
     private static final org.slf4j.Logger log =
             org.slf4j.LoggerFactory.getLogger(UserService.class);
-    private UserServiceDB userService;
+    private final UserServiceDB userService;
 
     @Autowired
-    public void setUserService(UserServiceDB userService){
+    public UserService(final UserServiceDB userService){
         this.userService = userService;
     }
 

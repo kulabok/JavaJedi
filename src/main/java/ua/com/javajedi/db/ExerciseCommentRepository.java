@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import ua.com.javajedi.model.comment.ExerciseComment;
 
 @Repository
-public interface ExerciseCommentRepository extends JpaRepository<ExerciseComment,Long>{
+public interface ExerciseCommentRepository extends JpaRepository<ExerciseComment, Long> {
 }

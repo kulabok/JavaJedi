@@ -9,19 +9,19 @@ import ua.com.javajedi.model.Article;
 import java.util.List;
 
 @Repository
-public interface ArticleRepository extends JpaRepository<Article,Long> {
-    @Query(value =
-    "SELECT * FROM article where not article_id in " +
-    "(select already_read_article_id from user_already_read where readers_user_id=?1)", nativeQuery = true)
-    List<Article> findAllUnread(@Param("userId") long userId);
+public interface ArticleRepository extends JpaRepository<Article, Long> {
+	@Query(value =
+		"SELECT * FROM article WHERE NOT article_id IN " +
+			"(SELECT already_read_article_id FROM user_already_read WHERE readers_user_id=?1)", nativeQuery = true)
+	List<Article> findAllUnread(@Param("userId") long userId);
 
-    Article findByTitle(String title);
+	Article findByTitle(String title);
 
-    @Query(value = "SELECT COUNT(*) FROM article", nativeQuery = true)
-    long articlesCount();
+	@Query(value = "SELECT COUNT(*) FROM article", nativeQuery = true)
+	long articlesCount();
 
-    @Query(value =
-    "SELECT * FROM article as l left join user_already_read as r on \n" +
-    "l.article_id = r.already_read_article_id where r.readers_user_id=?1 group by l.article_id", nativeQuery = true)
-    List<Article> findAllAlreadyRead(@Param("userId") long userId);
+	@Query(value =
+		"SELECT * FROM article AS l LEFT JOIN user_already_read AS r ON \n" +
+			"l.article_id = r.already_read_article_id WHERE r.readers_user_id=?1 GROUP BY l.article_id", nativeQuery = true)
+	List<Article> findAllAlreadyRead(@Param("userId") long userId);
 }

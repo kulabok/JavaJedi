@@ -8,48 +8,49 @@ import javax.persistence.*;
 @Entity
 @Table(name = "answer")
 public class Answer {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "answer_id")
-    private long answerId;
-    @ManyToOne()
-    @JoinColumn(name = "exerciseId")
-    @Fetch(value = FetchMode.JOIN)
-    private Exercise exercise;
-    private String content;
-    private boolean isCorrect;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "answer_id")
+	private long answerId;
+	@ManyToOne()
+	@JoinColumn(name = "exerciseId")
+	@Fetch(value = FetchMode.JOIN)
+	private Exercise exercise;
+	private String content;
+	private boolean isCorrect;
 
-    public Answer(){}
+	public Answer() {
+	}
 
-    public long getAnswerId() {
-        return answerId;
-    }
+	public long getAnswerId() {
+		return answerId;
+	}
 
-    public void setAnswerId(long answerId) {
-        this.answerId = answerId;
-    }
+	public void setAnswerId(long answerId) {
+		this.answerId = answerId;
+	}
 
-    public Exercise getExercise() {
-        return exercise;
-    }
+	public Exercise getExercise() {
+		return exercise;
+	}
 
-    public void setExercise(Exercise exercise) {
-        this.exercise = exercise;
-    }
+	public void setExercise(Exercise exercise) {
+		this.exercise = exercise;
+	}
 
-    public String getContent() {
-        return content;
-    }
+	public String getContent() {
+		return content;
+	}
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+	public void setContent(String content) {
+		this.content = content;
+	}
 
-    public boolean isCorrect() {
-        return isCorrect;
-    }
+	public boolean isCorrect() {
+		return isCorrect;
+	}
 
-    public void setCorrect(boolean correct) {
-        isCorrect = correct;
-    }
+	public void setCorrect(boolean correct) {
+		isCorrect = correct;
+	}
 }

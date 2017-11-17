@@ -8,7 +8,7 @@ import ua.com.javajedi.model.Answer;
 import java.util.List;
 
 @Repository
-public interface AnswerRepository extends JpaRepository<Answer,Long> {
-    @Query(value = "SELECT * FROM answer where exercise_id=?1", nativeQuery = true)
-    List<Answer> findAllByExerciseId(long exerciseId);
+public interface AnswerRepository extends JpaRepository<Answer, Long> {
+	@Query(value = "SELECT * FROM answer WHERE exercise_id=?1", nativeQuery = true)
+	List<Answer> findAllByExerciseId(long exerciseId);
 }

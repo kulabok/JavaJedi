@@ -11,71 +11,72 @@ import java.util.Date;
 @Entity
 @Table(name = "exercise_comment")
 public class ExerciseComment {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "e_comment_id")
-    private long eCommentId;
-    @ManyToOne()
-    @JoinColumn(name = "userId")
-    @Fetch(value = FetchMode.JOIN)
-    private User author;
-    @ManyToOne()
-    @JoinColumn(name = "exerciseId")
-    @Fetch(value = FetchMode.JOIN)
-    private Exercise exercise;
-    @Temporal(value = TemporalType.DATE)
-    private Date date;
-    private long likes;
-    @Column(columnDefinition = "text")
-    private String content;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "e_comment_id")
+	private long eCommentId;
+	@ManyToOne()
+	@JoinColumn(name = "userId")
+	@Fetch(value = FetchMode.JOIN)
+	private User author;
+	@ManyToOne()
+	@JoinColumn(name = "exerciseId")
+	@Fetch(value = FetchMode.JOIN)
+	private Exercise exercise;
+	@Temporal(value = TemporalType.DATE)
+	private Date date;
+	private long likes;
+	@Column(columnDefinition = "text")
+	private String content;
 
-    public ExerciseComment(){}
+	public ExerciseComment() {
+	}
 
-    public long geteCommentId() {
-        return eCommentId;
-    }
+	public long geteCommentId() {
+		return eCommentId;
+	}
 
-    public void seteCommentId(long eCommentId) {
-        this.eCommentId = eCommentId;
-    }
+	public void seteCommentId(long eCommentId) {
+		this.eCommentId = eCommentId;
+	}
 
-    public User getAuthor() {
-        return author;
-    }
+	public User getAuthor() {
+		return author;
+	}
 
-    public void setAuthor(User author) {
-        this.author = author;
-    }
+	public void setAuthor(User author) {
+		this.author = author;
+	}
 
-    public Exercise getExercise() {
-        return exercise;
-    }
+	public Exercise getExercise() {
+		return exercise;
+	}
 
-    public void setExercise(Exercise exercise) {
-        this.exercise = exercise;
-    }
+	public void setExercise(Exercise exercise) {
+		this.exercise = exercise;
+	}
 
-    public Date getDate() {
-        return date;
-    }
+	public Date getDate() {
+		return date;
+	}
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+	public void setDate(Date date) {
+		this.date = date;
+	}
 
-    public long getLikes() {
-        return likes;
-    }
+	public long getLikes() {
+		return likes;
+	}
 
-    public void setLikes(long likes) {
-        this.likes = likes;
-    }
+	public void setLikes(long likes) {
+		this.likes = likes;
+	}
 
-    public String getContent() {
-        return content;
-    }
+	public String getContent() {
+		return content;
+	}
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+	public void setContent(String content) {
+		this.content = content;
+	}
 }
