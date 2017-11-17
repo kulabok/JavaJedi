@@ -12,9 +12,4 @@ import java.util.List;
 @Repository
 public interface StatisticsRepository extends JpaRepository<Statistics, Long> {
 	Statistics findByPageAndActionAndDate(Page page, Action action, Date date);
-	Long countByDate(Date date);
-	Long countByPage(Page page);
-	Long countByPageAndDate(Page page, Date date);
-	Long countByAction(Action action);
-	Long countByActionAndDate(Action action, Date date);
 }
