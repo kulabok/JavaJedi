@@ -13,6 +13,8 @@ import ua.com.javajedi.service.IntroService;
 import ua.com.javajedi.service.StatisticsService;
 import ua.com.javajedi.utils.StatUtils;
 
+import java.time.LocalDate;
+
 @Controller
 public class AuthorizationController {
 	private static final org.slf4j.Logger log =
@@ -50,7 +52,7 @@ public class AuthorizationController {
 		mav.addObject("message", "Hello, " + user.getUsername() + "!");
 		log.info("User with username: " + user.getUsername() + " had been successfully authorized.");
 		if (user.getAuthorities().contains(Role.ADMIN)) {
-			mav.addObject("admin", "You are admin - be proud of it!");
+			mav.addObject("stats", statisticsService.getAllForAdmin());
 		}
 		mav.setViewName("cabinet");
 		statisticsService.save(StatUtils.createStatistics(Page.CABINET, Action.LOGIN));

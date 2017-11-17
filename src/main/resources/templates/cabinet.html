@@ -12,49 +12,65 @@
             margin: 0;
             padding: 0;
             background-color: white;
-        } /* обнуляем отступы */
+        }
+
+        /* обнуляем отступы */
         body {
             text-align: center; /* выравниваем все содержимое body по центру */
             background: grey; /* цвет фона для наглядности */
         }
+
         div {
             width: 800px; /* ширина основного блока */
             height: 100%; /* высота для наглядности */
             background: white; /* цвет блока для наглядности */
             margin: 0 auto; /* задаем отступ слева и справа auto чтобы сработало выравнивание по центру */
         }
-        .nav-tabs ul li{
+
+        .nav-tabs ul li {
 
         }
     </style>
 
 </head>
-<body >
-    <div data-th-if="${message != null}">
-        <H4 data-th-text="${message}">Message</H4>
-    </div>
+<body>
+<div data-th-if="${message != null}">
+    <H4 data-th-text="${message}">Message</H4>
+</div>
 
-    <div data-th-if="${admin != null}">
-        <H4 data-th-text="${admin}">Message</H4>
-    </div>
+<div data-th-if="${stats != null}">
+    <table class="table">
+        <tr>
+            <th>Action</th>
+            <th>Date</th>
+            <th>Page</th>
+            <th>Visitors</th>
+        </tr>
+        <tr data-th-each="stat : ${stats}">
+            <td data-th-text="${stat.action}">Date</td>
+            <td data-th-text="${stat.date}">Title</td>
+            <td data-th-text="${stat.page}">Title</td>
+            <td data-th-text="${stat.visitors}">Title</td>
+        </tr>
+    </table>
+</div>
 
-    <div>
-        <ul class="nav nav-tabs" >
-            <li role="presentation" class="active"><a href="#">Home</a></li>
-            <li role="presentation"><a name="articles/all" data-th-href="@{/articles/all}">All Articles</a></li>
-            <li role="presentation"><a name="articles/unread" data-th-href="@{/articles/unread}">Unread Articles</a></li>
-            <li role="presentation"><a name="exercises/all" data-th-href="@{/exercises/all}">All Exercises</a></li>
-            <li role="presentation"><a name="exercises/undone" data-th-href="@{/exercises/undone}">Undone Exercises</a></li>
-        </ul>
-    </div>
+<div>
+    <ul class="nav nav-tabs">
+        <li role="presentation" class="active"><a href="#">Home</a></li>
+        <li role="presentation"><a name="articles/all" data-th-href="@{/articles/all}">All Articles</a></li>
+        <li role="presentation"><a name="articles/unread" data-th-href="@{/articles/unread}">Unread Articles</a></li>
+        <li role="presentation"><a name="exercises/all" data-th-href="@{/exercises/all}">All Exercises</a></li>
+        <li role="presentation"><a name="exercises/undone" data-th-href="@{/exercises/undone}">Undone Exercises</a></li>
+    </ul>
+</div>
 
-    <div id="entrance">
-
-
+<div id="entrance">
 
 
     <!-- This is ALL ARTICLES part -->
-        <div data-th-if="${articles != null}"><table class="table">
+    <div data-th-if="${articles != null}">
+        <table class="table">
             <tr>
                 <th>Date</th>
                 <th>Title</th>
@@ -63,17 +79,20 @@
             <tr data-th-each="article : ${articles}">
                 <td data-th-text="${article.date}">Date</td>
                 <td data-th-text="${article.title}">Title</td>
-                <td >
+                <td>
 
                     <form action="/articles/findByTitle">
                         <input type="hidden" name="title" data-th-value="${article.title}"/>
                         <input type="submit" value="Read"/>
-                    </form></td>
+                    </form>
+                </td>
             </tr>
-        </table></div>
+        </table>
+    </div>
 
-        <!-- This is UNREAD ARTICLES part -->
-        <div data-th-if="${unread != null}" ><table class="table">
+    <!-- This is UNREAD ARTICLES part -->
+    <div data-th-if="${unread != null}">
+        <table class="table">
             <tr>
                 <th>Date</th>
                 <th>Title</th>
@@ -82,15 +101,19 @@
             <tr data-th-each="article : ${unread}">
                 <td data-th-text="${article.date}">Date</td>
                 <td data-th-text="${article.title}">Title</td>
-                <td ><form action="/articles/findByTitle">
-                    <input type="hidden" name="title" data-th-value="${article.title}"/>
-                    <input type="submit" value="Read"/>
-                </form></td>
+                <td>
+                    <form action="/articles/findByTitle">
+                        <input type="hidden" name="title" data-th-value="${article.title}"/>
+                        <input type="submit" value="Read"/>
+                    </form>
+                </td>
             </tr>
-        </table></div>
+        </table>
+    </div>
 
-        <!-- This is ALL EXERCISES part -->
-        <div data-th-if="${exercises != null}"><table class="table">
+    <!-- This is ALL EXERCISES part -->
+    <div data-th-if="${exercises != null}">
+        <table class="table">
             <tr>
                 <th>Branch</th>
                 <th>Title</th>
@@ -99,16 +122,19 @@
             <tr data-th-each="exercise : ${exercises}">
                 <td data-th-text="${exercise.branch}">Date</td>
                 <td data-th-text="${exercise.title}">Title</td>
-                <td >
+                <td>
                     <form action="/exercise/findByTitle">
                         <input type="hidden" name="title" data-th-value="${exercise.title}"/>
                         <input type="submit" value="Try"/>
-                    </form></td>
+                    </form>
+                </td>
             </tr>
-        </table></div>
+        </table>
+    </div>
 
-        <!-- This is UNDONE EXERCISES part -->
-        <div data-th-if="${undone != null}" ><table class="table">
+    <!-- This is UNDONE EXERCISES part -->
+    <div data-th-if="${undone != null}">
+        <table class="table">
             <tr>
                 <th>Date</th>
                 <th>Title</th>
@@ -117,57 +143,60 @@
             <tr data-th-each="exercise : ${undone}">
                 <td data-th-text="${exercise.branch}">Date</td>
                 <td data-th-text="${exercise.title}">Title</td>
-                <td ><form action="/exercise/findByTitle" >
-                    <input type="hidden" name="title" data-th-value="${exercise.title}"/>
-                    <input type="submit" value="Try"/>
-                </form></td>
+                <td>
+                    <form action="/exercise/findByTitle">
+                        <input type="hidden" name="title" data-th-value="${exercise.title}"/>
+                        <input type="submit" value="Try"/>
+                    </form>
+                </td>
             </tr>
-        </table></div>
+        </table>
+    </div>
 
-        <!-- This is SELECTED ARTICLE part -->
-        <div data-th-if="${articleByTitle != null}" >
-                <p data-th-text="${articleByTitle.date}"></p>
-                <p data-th-text="${articleByTitle.title}"></p>
-                <p data-th-text="${articleByTitle.content}"></p>
+    <!-- This is SELECTED ARTICLE part -->
+    <div data-th-if="${articleByTitle != null}">
+        <p data-th-text="${articleByTitle.date}"></p>
+        <p data-th-text="${articleByTitle.title}"></p>
+        <p data-th-text="${articleByTitle.content}"></p>
 
-            <table class="table">
-                <tr>
-                    <th>Date and Time</th>
-                    <th>Author</th>
-                    <th>Comment</th>
+        <table class="table">
+            <tr>
+                <th>Date and Time</th>
+                <th>Author</th>
+                <th>Comment</th>
 
-                </tr>
-                <tr data-th-each="comment : ${articleComments}">
-                    <td data-th-text="${comment.date}">Date and Time</td>
-                    <td data-th-text="${comment.author.username}">Author</td>
-                    <td data-th-text="${comment.content}">Content</td>
+            </tr>
+            <tr data-th-each="comment : ${articleComments}">
+                <td data-th-text="${comment.date}">Date and Time</td>
+                <td data-th-text="${comment.author.username}">Author</td>
+                <td data-th-text="${comment.content}">Content</td>
 
-                </tr>
-            </table>
-            <form action="/comments/addComment" method="post">
+            </tr>
+        </table>
+        <form action="/comments/addComment" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <input type="hidden" name="userId" th:value="${user.userId}"/>
+            <input type="hidden" name="articleId" data-th-value="${articleByTitle.articleId}"/>
+            <textarea rows="5" cols="45" maxlength="2000" name="content"> </textarea>
+            <input type="submit" value="new Comment"/>
+        </form>
+
+    </div>
+
+    <!-- This is SELECTED EXERCISE part -->
+    <div data-th-if="${exercise != null}">
+
+        <p data-th-text="${exercise.branch}"></p>
+        <p data-th-text="${exercise.title}"></p>
+        <p data-th-text="${exercise.content}"></p>
+
+        <table class="table">
+            <tr>
+                <td>Check</td>
+                <td>Option</td>
+            </tr>
+            <form action="/resolveAnswer" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                <input type="hidden" name="userId" th:value="${user.userId}"/>
-                <input type="hidden" name="articleId" data-th-value="${articleByTitle.articleId}"/>
-                <textarea rows="5" cols="45" maxlength="2000" name="content"> </textarea>
-                <input type="submit" value="new Comment"/>
-            </form>
-
-           </div>
-
-        <!-- This is SELECTED EXERCISE part -->
-        <div data-th-if="${exercise != null}" >
-
-            <p data-th-text="${exercise.branch}"></p>
-            <p data-th-text="${exercise.title}"></p>
-            <p data-th-text="${exercise.content}"></p>
-
-            <table class="table">
-                <tr>
-                    <td>Check</td>
-                    <td>Option</td>
-                </tr>
-                <form action="/resolveAnswer" method="post">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <tr data-th-each="answer : ${answers}">
                     <td>
                         <input name="answer" type="checkbox" data-th-value="${answer.content}"/>
@@ -176,13 +205,13 @@
                     <td data-th-text="${answer.content}">Content</td>
 
                 </tr>
-                    <input type="hidden" name="exerciseId" data-th-value="${exercise.exerciseId}"/>
-                    <input type="hidden" name="title" data-th-value="${exercise.title}"/>
+                <input type="hidden" name="exerciseId" data-th-value="${exercise.exerciseId}"/>
+                <input type="hidden" name="title" data-th-value="${exercise.title}"/>
 
                 <input type="submit" value="Go!"/>
-                </form>
-            </table>
-        </div>
+            </form>
+        </table>
     </div>
+</div>
 </body>
 </html>

@@ -7,6 +7,7 @@ import ua.com.javajedi.model.statistics.Statistics;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 public class StatisticsServiceImpl implements StatisticsService {
@@ -32,5 +33,10 @@ public class StatisticsServiceImpl implements StatisticsService {
 		statistics.setVisitors(1);
 		statisticsRepository.saveAndFlush(statistics);
 		return true;
+	}
+
+	@Override
+	public List<Statistics> getAllForAdmin() {
+		return statisticsRepository.findByDate(Date.valueOf(LocalDate.now()));
 	}
 }
