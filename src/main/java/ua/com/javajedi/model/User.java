@@ -235,4 +235,29 @@ public class User implements UserDetails {
 	public void setArticLike(List<ExerciseLike> articLike) {
 		this.articLike = articLike;
 	}
+
+	@Override
+	public String toString() {
+		return "User{" +
+			"userId=" + userId +
+			", email='" + email + '\'' +
+			", username='" + username + '\'' +
+			", password='" + password + '\'' +
+			", authorities=" + authorities.toString() +
+			", accountNonExpired=" + accountNonExpired +
+			", accountNonLocked=" + accountNonLocked +
+			", credentialsNonExpired=" + credentialsNonExpired +
+			", enabled=" + enabled +
+			", aboutMe='" + aboutMe + '\'' +
+			", registrationDate=" + registrationDate +
+			", alreadyRead=" + alreadyRead.toString() +
+			", alreadyDone=" + alreadyDone.toString() +
+			", myArticles=" + myArticles.toString() +
+			", rank=" + rank +
+			", score=" + score +
+			", articleComments=" + articleComments.toString() +
+			", exeLike=" + exeLike.toString() +
+			", articLike=" + articLike.toString() +
+			'}';
+	}
 }
