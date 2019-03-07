@@ -52,7 +52,7 @@ public class ArticlesController {
 	@Secured({"USER", "ADMIN"})
 	public ModelAndView findAllUnread(ModelAndView mav) {
 		User user = getCurrentUser();
-		mav.addObject("unread", articleService.findAllUnread(user.getUserId()));
+		mav.addObject("unread", articleService.findAllUnread(user.getId()));
 		if (user.getAuthorities().contains(Role.ADMIN)) {
 			mav.addObject("stats", statisticsService.getAllForAdmin());
 		}
@@ -66,7 +66,7 @@ public class ArticlesController {
 	public ModelAndView findByTitle(String title,
 	                                ModelAndView mav) {
 		Article article = articleService.findByTitle(title, getCurrentUser());
-		List<ArticleComment> comments = articleCommentService.findAllByArticleId(article.getArticleId());
+		List<ArticleComment> comments = articleCommentService.findAllByArticleId(article.getId());
 		mav.addObject("user", getCurrentUser());
 		mav.addObject("articleByTitle", article);
 		mav.addObject("articleComments", comments);

@@ -19,7 +19,7 @@ public class UserServiceDBImpl implements UserServiceDB {
 
 	@Override
 	public boolean exist(User user) {
-		return userRepository.existsById(user.getUserId());
+		return userRepository.existsById(user.getId());
 	}
 
 	@Override

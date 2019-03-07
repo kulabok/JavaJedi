@@ -1,6 +1,7 @@
 package ua.com.javajedi.model.like;
 
 import ua.com.javajedi.model.Exercise;
+import ua.com.javajedi.model.PersistentEntity;
 import ua.com.javajedi.model.User;
 
 import javax.persistence.*;
@@ -8,11 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "ex_like")
-public class ExerciseLike {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "ex_like_id")
-	private long exLikeId;
+public class ExerciseLike extends PersistentEntity<Long> {
 	@OneToOne(mappedBy = "exLike")
 	private Exercise exercise;
 	@ManyToMany(mappedBy = "exeLike")
@@ -20,14 +17,6 @@ public class ExerciseLike {
 	private long value;
 
 	public ExerciseLike() {
-	}
-
-	public long getExLikeId() {
-		return exLikeId;
-	}
-
-	public void setExLikeId(long exLikeId) {
-		this.exLikeId = exLikeId;
 	}
 
 	public Exercise getExercise() {

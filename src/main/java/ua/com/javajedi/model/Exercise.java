@@ -9,11 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "exercise")
-public class Exercise {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "exercise_id")
-	private long exerciseId;
+public class Exercise extends PersistentEntity<Long>{
 	@ManyToMany(mappedBy = "alreadyDone")
 	private List<User> readers;
 	@Enumerated(EnumType.STRING)
@@ -30,14 +26,6 @@ public class Exercise {
 	private ExerciseLike exLike;
 
 	public Exercise() {
-	}
-
-	public long getExerciseId() {
-		return exerciseId;
-	}
-
-	public void setExerciseId(long exerciseId) {
-		this.exerciseId = exerciseId;
 	}
 
 	public List<User> getReaders() {

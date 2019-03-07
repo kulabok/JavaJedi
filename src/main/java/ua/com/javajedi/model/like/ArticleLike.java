@@ -1,6 +1,7 @@
 package ua.com.javajedi.model.like;
 
 import ua.com.javajedi.model.Article;
+import ua.com.javajedi.model.PersistentEntity;
 import ua.com.javajedi.model.User;
 
 import javax.persistence.*;
@@ -8,11 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "art_like")
-public class ArticleLike {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "art_like_id")
-	private long artLikeId;
+public class ArticleLike extends PersistentEntity<Long> {
 	@OneToOne(mappedBy = "artLike")
 	private Article article;
 	@ManyToMany(mappedBy = "articLike")
@@ -20,14 +17,6 @@ public class ArticleLike {
 	private long value;
 
 	public ArticleLike() {
-	}
-
-	public long getArtLikeId() {
-		return artLikeId;
-	}
-
-	public void setARTLikeId(long artLikeId) {
-		this.artLikeId = artLikeId;
 	}
 
 	public Article getArticle() {

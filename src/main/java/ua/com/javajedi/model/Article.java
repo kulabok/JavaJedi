@@ -11,11 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "article")
-public class Article {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "article_id")
-	private long articleId;
+public class Article extends PersistentEntity<Long>{
 	@ManyToOne()
 	@JoinColumn(name = "userId")
 	@Fetch(value = FetchMode.JOIN)
@@ -37,14 +33,6 @@ public class Article {
 	private List<ArticleComment> comments;
 
 	public Article() {
-	}
-
-	public long getArticleId() {
-		return articleId;
-	}
-
-	public void setArticleId(long articleId) {
-		this.articleId = articleId;
 	}
 
 	public User getAuthor() {

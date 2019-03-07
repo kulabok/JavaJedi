@@ -1,16 +1,13 @@
 package ua.com.javajedi.model.statistics;
 
+import ua.com.javajedi.model.PersistentEntity;
+
 import javax.persistence.*;
-import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "statistics")
-public class Statistics {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "stat_id")
-	private long statId;
+public class Statistics extends PersistentEntity<Long> {
 	private LocalDate date;
 	private long visitors;
 	@Enumerated(EnumType.STRING)
@@ -27,14 +24,6 @@ public class Statistics {
 		stat.setPage(page);
 		stat.setAction(action);
 		return stat;
-	}
-
-	public long getStatId() {
-		return statId;
-	}
-
-	public void setStatId(long statId) {
-		this.statId = statId;
 	}
 
 	public LocalDate getDate() {
@@ -72,7 +61,7 @@ public class Statistics {
 	@Override
 	public String toString() {
 		return "{" +
-			"\"statId\":\"" + statId +
+			"\"statId\":\"" + super.getId() +
 			"\", \"date\":\"" + date +
 			"\", \"visitors\":\"" + visitors +
 			"\", \"page\":\"" + page.name() +

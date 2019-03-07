@@ -16,11 +16,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "user")
-public class User implements UserDetails {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "user_id")
-	private long userId;
+public class User extends PersistentEntity<Long> implements UserDetails {
 	@Column(unique = true)
 	private String email;
 
@@ -82,14 +78,6 @@ public class User implements UserDetails {
 		this.enabled = true;
 		this.registrationDate = Calendar.getInstance().getTime();
 		this.rank = Rank.PADAVAN;
-	}
-
-	public long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(long userId) {
-		this.userId = userId;
 	}
 
 	public String getEmail() {
@@ -239,7 +227,7 @@ public class User implements UserDetails {
 	@Override
 	public String toString() {
 		return "User{" +
-			"userId=" + userId +
+			"userId=" + super.getId() +
 			", email='" + email + '\'' +
 			", username='" + username + '\'' +
 			", password='" + password + '\'' +

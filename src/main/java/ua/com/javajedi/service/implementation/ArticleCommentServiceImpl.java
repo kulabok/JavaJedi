@@ -55,7 +55,7 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 
 	@Override
 	public ArticleComment findById(ArticleComment articleComment) {
-		return articleCommentRepository.findById(articleComment.getaCommentId()).get();
+		return articleCommentRepository.findById(articleComment.getId()).get();
 	}
 
 	@Override

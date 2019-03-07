@@ -46,7 +46,7 @@ public class AnswerServiceImpl implements AnswerService {
 
 	@Override
 	public Answer findById(Answer answer) {
-		return answerRepository.findById(answer.getAnswerId()).get();
+		return answerRepository.findById(answer.getId()).get();
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class AnswerServiceImpl implements AnswerService {
 		List<Answer> answers = answerRepository.findAllByExerciseId(id);
 		for (Answer a : answers) {
 			if (a.isCorrect() && Objects.equals(a.getContent(), answer)) {
-				List<Exercise> done = exerciseService.findAllDone(user.getUserId());
+				List<Exercise> done = exerciseService.findAllDone(user.getId());
 				done.add(exerciseService.findById(id));
 				user.setAlreadyDone(done);
 				userService.update(user);

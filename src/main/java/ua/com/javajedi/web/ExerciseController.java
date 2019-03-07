@@ -48,7 +48,7 @@ public class ExerciseController {
 	@Secured({"USER", "ADMIN"})
 	public ModelAndView findAllUndone(ModelAndView mav) {
 		User user = getCurrentUser();
-		mav.addObject("undone", exerciseService.findAllUndone(user.getUserId()));
+		mav.addObject("undone", exerciseService.findAllUndone(user.getId()));
 		if (user.getAuthorities().contains(Role.ADMIN)) {
 			mav.addObject("stats", statisticsService.getAllForAdmin());
 		}
@@ -63,7 +63,7 @@ public class ExerciseController {
 	                                ModelAndView mav) {
 		Exercise exercise = exerciseService.findByTitle(title);
 		mav.addObject("exercise", exercise);
-		mav.addObject("answers", answerService.findAllByExerciseId(exercise.getExerciseId()));
+		mav.addObject("answers", answerService.findAllByExerciseId(exercise.getId()));
 		if (getCurrentUser().getAuthorities().contains(Role.ADMIN)) {
 			mav.addObject("stats", statisticsService.getAllForAdmin());
 		}

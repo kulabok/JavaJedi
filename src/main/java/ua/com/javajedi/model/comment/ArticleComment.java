@@ -3,6 +3,7 @@ package ua.com.javajedi.model.comment;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import ua.com.javajedi.model.Article;
+import ua.com.javajedi.model.PersistentEntity;
 import ua.com.javajedi.model.User;
 
 import javax.persistence.*;
@@ -10,11 +11,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "article_comment")
-public class ArticleComment {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "a_comment_id")
-	private long aCommentId;
+public class ArticleComment extends PersistentEntity<Long> {
 	@ManyToOne()
 	@JoinColumn(name = "userId")
 	@Fetch(value = FetchMode.JOIN)
@@ -30,14 +27,6 @@ public class ArticleComment {
 	private String content;
 
 	public ArticleComment() {
-	}
-
-	public long getaCommentId() {
-		return aCommentId;
-	}
-
-	public void setaCommentId(long aCommentId) {
-		this.aCommentId = aCommentId;
 	}
 
 	public User getAuthor() {

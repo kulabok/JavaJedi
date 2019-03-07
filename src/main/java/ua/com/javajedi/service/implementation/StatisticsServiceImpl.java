@@ -6,7 +6,6 @@ import ua.com.javajedi.db.StatisticsRepository;
 import ua.com.javajedi.model.statistics.Statistics;
 import ua.com.javajedi.service.StatisticsService;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -38,6 +37,6 @@ public class StatisticsServiceImpl implements StatisticsService {
 
 	@Override
 	public List<Statistics> getAllForAdmin() {
-		return statisticsRepository.findByDate(Date.valueOf(LocalDate.now()));
+		return statisticsRepository.findByDate(LocalDate.now());
 	}
 }

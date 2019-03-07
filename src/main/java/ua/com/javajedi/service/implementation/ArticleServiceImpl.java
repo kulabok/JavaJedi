@@ -62,7 +62,7 @@ public class ArticleServiceImpl implements ArticleService {
 	@Override
 	public Article findByTitle(String title, User user) {
 		Article article = articleRepository.findByTitle(title);
-		List<Article> alreadyRead = findAllAlreadyRead(user.getUserId());
+		List<Article> alreadyRead = findAllAlreadyRead(user.getId());
 		alreadyRead.add(article);
 		user.setAlreadyRead(alreadyRead);
 		userService.update(user);

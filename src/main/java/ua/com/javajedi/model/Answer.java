@@ -7,11 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "answer")
-public class Answer {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "answer_id")
-	private long answerId;
+public class Answer extends PersistentEntity<Long>{
 	@ManyToOne()
 	@JoinColumn(name = "exerciseId")
 	@Fetch(value = FetchMode.JOIN)
@@ -20,14 +16,6 @@ public class Answer {
 	private boolean isCorrect;
 
 	public Answer() {
-	}
-
-	public long getAnswerId() {
-		return answerId;
-	}
-
-	public void setAnswerId(long answerId) {
-		this.answerId = answerId;
 	}
 
 	public Exercise getExercise() {
