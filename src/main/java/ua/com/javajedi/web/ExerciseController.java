@@ -2,22 +2,20 @@ package ua.com.javajedi.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.javajedi.model.Exercise;
 import ua.com.javajedi.model.Role;
 import ua.com.javajedi.model.User;
 import ua.com.javajedi.model.statistics.Action;
 import ua.com.javajedi.model.statistics.Page;
+import ua.com.javajedi.model.statistics.Statistics;
 import ua.com.javajedi.service.AnswerService;
 import ua.com.javajedi.service.ExerciseService;
 import ua.com.javajedi.service.StatisticsService;
-import ua.com.javajedi.utils.StatUtils;
+
+import static ua.com.javajedi.utils.SecurityUtils.getCurrentUser;
 
 @Controller
 public class ExerciseController {
@@ -39,10 +37,10 @@ public class ExerciseController {
 	public ModelAndView findAllExercises(ModelAndView mav) {
 		mav.addObject("exercises", exerciseService.findAll());
 		if (getCurrentUser().getAuthorities().contains(Role.ADMIN)) {
-			mav.addObject("admin", "You are admin!");
+			mav.addObject("stats", statisticsService.getAllForAdmin());
 		}
 		mav.setViewName("cabinet");
-		statisticsService.save(StatUtils.createStatistics(Page.CABINET, Action.GET_EXERCISES_ALL));
+		statisticsService.save(Statistics.of(Page.CABINET, Action.GET_EXERCISES_ALL));
 		return mav;
 	}
 
@@ -52,10 +50,10 @@ public class ExerciseController {
 		User user = getCurrentUser();
 		mav.addObject("undone", exerciseService.findAllUndone(user.getUserId()));
 		if (user.getAuthorities().contains(Role.ADMIN)) {
-			mav.addObject("admin", "You are admin!");
+			mav.addObject("stats", statisticsService.getAllForAdmin());
 		}
 		mav.setViewName("cabinet");
-		statisticsService.save(StatUtils.createStatistics(Page.CABINET, Action.GET_EXERCISES_UNDONE));
+		statisticsService.save(Statistics.of(Page.CABINET, Action.GET_EXERCISES_UNDONE));
 		return mav;
 	}
 
@@ -67,14 +65,10 @@ public class ExerciseController {
 		mav.addObject("exercise", exercise);
 		mav.addObject("answers", answerService.findAllByExerciseId(exercise.getExerciseId()));
 		if (getCurrentUser().getAuthorities().contains(Role.ADMIN)) {
-			mav.addObject("admin", "You are admin!");
+			mav.addObject("stats", statisticsService.getAllForAdmin());
 		}
 		mav.setViewName("cabinet");
-		statisticsService.save(StatUtils.createStatistics(Page.CABINET, Action.TRY_EXERCISE));
+		statisticsService.save(Statistics.of(Page.CABINET, Action.TRY_EXERCISE));
 		return mav;
-	}
-
-	private User getCurrentUser() {
-		return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 }

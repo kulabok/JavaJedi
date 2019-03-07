@@ -1,7 +1,10 @@
-package ua.com.javajedi.service;
+package ua.com.javajedi.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ua.com.javajedi.service.ArticleService;
+import ua.com.javajedi.service.ExerciseService;
+import ua.com.javajedi.service.IntroService;
 
 @Service
 public class IntroServiceImpl implements IntroService {

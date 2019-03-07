@@ -1,9 +1,10 @@
-package ua.com.javajedi.service;
+package ua.com.javajedi.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.javajedi.db.StatisticsRepository;
 import ua.com.javajedi.model.statistics.Statistics;
+import ua.com.javajedi.service.StatisticsService;
 
 import java.sql.Date;
 import java.time.LocalDate;
@@ -20,8 +21,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 
 	@Override
 	public boolean save(Statistics statistics) {
-		Date now = Date.valueOf(LocalDate.now());
-		if (statistics.getDate().before(Date.valueOf(LocalDate.of(now.getYear(), now.getMonth(), now.getDay() - 1)))){
+		LocalDate now = LocalDate.now();
+		if (statistics.getDate().isBefore(now.minusDays(1L))){
 			return false;
 		}
 		Statistics old = statisticsRepository.findByPageAndActionAndDate(statistics.getPage(), statistics.getAction(), statistics.getDate());

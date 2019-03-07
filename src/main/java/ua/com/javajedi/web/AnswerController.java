@@ -2,7 +2,6 @@ package ua.com.javajedi.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -10,10 +9,12 @@ import ua.com.javajedi.model.Role;
 import ua.com.javajedi.model.User;
 import ua.com.javajedi.model.statistics.Action;
 import ua.com.javajedi.model.statistics.Page;
+import ua.com.javajedi.model.statistics.Statistics;
 import ua.com.javajedi.service.AnswerService;
 import ua.com.javajedi.service.ExerciseService;
 import ua.com.javajedi.service.StatisticsService;
-import ua.com.javajedi.utils.StatUtils;
+
+import static ua.com.javajedi.utils.SecurityUtils.getCurrentUser;
 
 @Controller
 public class AnswerController {
@@ -36,19 +37,18 @@ public class AnswerController {
 	                            String exerciseId,
 	                            ModelAndView mav) {
 
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = getCurrentUser();
 		String message = answerService.resolveAnswer(exerciseId, answer, user);
 
 		mav.addObject("user", user);
 		mav.addObject("exercises", exerciseService.findAll());
 		mav.addObject("message", message);
-
 		if (user.getAuthorities().contains(Role.ADMIN)) {
-			mav.addObject("admin", "You are admin!");
+			mav.addObject("stats", statisticsService.getAllForAdmin());
 		}
 
 		mav.setViewName("cabinet");
-		statisticsService.save(StatUtils.createStatistics(Page.CABINET, Action.TRY_EXERCISE));
+		statisticsService.save(Statistics.of(Page.CABINET, Action.TRY_EXERCISE));
 		return mav;
 	}
 

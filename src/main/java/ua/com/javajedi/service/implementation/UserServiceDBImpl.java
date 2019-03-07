@@ -1,9 +1,10 @@
-package ua.com.javajedi.service;
+package ua.com.javajedi.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.javajedi.db.UserRepository;
 import ua.com.javajedi.model.User;
+import ua.com.javajedi.service.UserServiceDB;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class UserServiceDBImpl implements UserServiceDB {
 
 	@Override
 	public boolean exist(User user) {
-		return userRepository.exists(user.getUserId());
+		return userRepository.existsById(user.getUserId());
 	}
 
 	@Override
@@ -41,13 +42,13 @@ public class UserServiceDBImpl implements UserServiceDB {
 
 	@Override
 	public User delete(User user) {
-		userRepository.delete(user.getUserId());
+		userRepository.delete(user);
 		return user;
 	}
 
 	@Override
 	public User findById(long userId) {
-		return userRepository.findOne(userId);
+		return userRepository.findById(userId).get();
 	}
 
 	@Override

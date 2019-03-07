@@ -2,11 +2,8 @@ package ua.com.javajedi.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.javajedi.model.Article;
 import ua.com.javajedi.model.Role;
@@ -14,12 +11,14 @@ import ua.com.javajedi.model.User;
 import ua.com.javajedi.model.comment.ArticleComment;
 import ua.com.javajedi.model.statistics.Action;
 import ua.com.javajedi.model.statistics.Page;
+import ua.com.javajedi.model.statistics.Statistics;
 import ua.com.javajedi.service.ArticleCommentService;
 import ua.com.javajedi.service.ArticleService;
 import ua.com.javajedi.service.StatisticsService;
-import ua.com.javajedi.utils.StatUtils;
 
 import java.util.List;
+
+import static ua.com.javajedi.utils.SecurityUtils.getCurrentUser;
 
 
 @Controller
@@ -45,7 +44,7 @@ public class ArticlesController {
 			mav.addObject("admin", "You are admin!");
 		}
 		mav.setViewName("cabinet");
-		statisticsService.save(StatUtils.createStatistics(Page.CABINET, Action.GET_ARTICLES_ALL));
+		statisticsService.save(Statistics.of(Page.CABINET, Action.GET_ARTICLES_ALL));
 		return mav;
 	}
 
@@ -55,10 +54,10 @@ public class ArticlesController {
 		User user = getCurrentUser();
 		mav.addObject("unread", articleService.findAllUnread(user.getUserId()));
 		if (user.getAuthorities().contains(Role.ADMIN)) {
-			mav.addObject("admin", "You are admin!");
+			mav.addObject("stats", statisticsService.getAllForAdmin());
 		}
 		mav.setViewName("cabinet");
-		statisticsService.save(StatUtils.createStatistics(Page.CABINET, Action.GET_ARTICLES_UNREAD));
+		statisticsService.save(Statistics.of(Page.CABINET, Action.GET_ARTICLES_UNREAD));
 		return mav;
 	}
 
@@ -68,19 +67,14 @@ public class ArticlesController {
 	                                ModelAndView mav) {
 		Article article = articleService.findByTitle(title, getCurrentUser());
 		List<ArticleComment> comments = articleCommentService.findAllByArticleId(article.getArticleId());
-		User user = getCurrentUser();
-		mav.addObject("user", user);
+		mav.addObject("user", getCurrentUser());
 		mav.addObject("articleByTitle", article);
 		mav.addObject("articleComments", comments);
-		if (user.getAuthorities().contains(Role.ADMIN)) {
-			mav.addObject("admin", "You are admin!");
+		if (getCurrentUser().getAuthorities().contains(Role.ADMIN)) {
+			mav.addObject("stats", statisticsService.getAllForAdmin());
 		}
 		mav.setViewName("cabinet");
-		statisticsService.save(StatUtils.createStatistics(Page.CABINET, Action.READ_ARTICLE));
+		statisticsService.save(Statistics.of(Page.CABINET, Action.READ_ARTICLE));
 		return mav;
-	}
-
-	private User getCurrentUser() {
-		return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 	}
 }

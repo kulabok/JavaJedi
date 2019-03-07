@@ -1,10 +1,12 @@
-package ua.com.javajedi.service;
+package ua.com.javajedi.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.javajedi.db.ArticleRepository;
 import ua.com.javajedi.model.Article;
 import ua.com.javajedi.model.User;
+import ua.com.javajedi.service.ArticleService;
+import ua.com.javajedi.service.UserServiceDB;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +35,13 @@ public class ArticleServiceImpl implements ArticleService {
 
 	@Override
 	public Article delete(Article article) {
-		articleRepository.delete(article.getArticleId());
+		articleRepository.delete(article);
 		return article;
 	}
 
 	@Override
 	public Article findById(long articleId) {
-		return articleRepository.findOne(articleId);
+		return articleRepository.findById(articleId).get();
 	}
 
 	@Override

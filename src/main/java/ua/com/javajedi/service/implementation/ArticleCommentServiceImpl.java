@@ -1,9 +1,12 @@
-package ua.com.javajedi.service;
+package ua.com.javajedi.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.javajedi.db.ArticleCommentRepository;
 import ua.com.javajedi.model.comment.ArticleComment;
+import ua.com.javajedi.service.ArticleCommentService;
+import ua.com.javajedi.service.ArticleService;
+import ua.com.javajedi.service.UserServiceDB;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -46,13 +49,13 @@ public class ArticleCommentServiceImpl implements ArticleCommentService {
 
 	@Override
 	public ArticleComment delete(long articleId) {
-		articleCommentRepository.delete(articleId);
-		return articleCommentRepository.findOne(articleId);
+		articleCommentRepository.deleteById(articleId);
+		return articleCommentRepository.findById(articleId).get();
 	}
 
 	@Override
 	public ArticleComment findById(ArticleComment articleComment) {
-		return articleCommentRepository.findOne(articleComment.getaCommentId());
+		return articleCommentRepository.findById(articleComment.getaCommentId()).get();
 	}
 
 	@Override

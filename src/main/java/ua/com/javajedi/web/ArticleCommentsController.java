@@ -2,12 +2,8 @@ package ua.com.javajedi.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.javajedi.model.Article;
 import ua.com.javajedi.model.Role;
@@ -15,12 +11,14 @@ import ua.com.javajedi.model.User;
 import ua.com.javajedi.model.comment.ArticleComment;
 import ua.com.javajedi.model.statistics.Action;
 import ua.com.javajedi.model.statistics.Page;
+import ua.com.javajedi.model.statistics.Statistics;
 import ua.com.javajedi.service.ArticleCommentService;
 import ua.com.javajedi.service.ArticleService;
 import ua.com.javajedi.service.StatisticsService;
-import ua.com.javajedi.utils.StatUtils;
 
 import java.util.List;
+
+import static ua.com.javajedi.utils.SecurityUtils.getCurrentUser;
 
 @Controller
 public class ArticleCommentsController {
@@ -43,7 +41,7 @@ public class ArticleCommentsController {
 	                               String articleId,
 	                               String content,
 	                               ModelAndView mav) {
-		User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		User user = getCurrentUser();
 		long id = Long.parseLong(articleId);
 		articleCommentService.add(userId, id, content);
 		Article article = articleService.findById(id);
@@ -52,11 +50,10 @@ public class ArticleCommentsController {
 		mav.addObject("articleByTitle", article);
 		mav.addObject("articleComments", comments);
 		if (user.getAuthorities().contains(Role.ADMIN)) {
-			mav.addObject("admin", "You are admin!");
+			mav.addObject("stats", statisticsService.getAllForAdmin());
 		}
 		mav.setViewName("cabinet");
-		statisticsService.save(StatUtils.createStatistics(Page.CABINET, Action.ADD_COMMENT));
+		statisticsService.save(Statistics.of(Page.CABINET, Action.ADD_COMMENT));
 		return mav;
 	}
-
 }

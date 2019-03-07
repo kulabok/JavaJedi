@@ -2,6 +2,7 @@ package ua.com.javajedi.model.statistics;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "statistics")
@@ -10,7 +11,7 @@ public class Statistics {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "stat_id")
 	private long statId;
-	private Date date;
+	private LocalDate date;
 	private long visitors;
 	@Enumerated(EnumType.STRING)
 	private Page page;
@@ -18,6 +19,14 @@ public class Statistics {
 	private Action action;
 
 	public Statistics() {
+	}
+
+	public static Statistics of(Page page, Action action) {
+		Statistics stat = new Statistics();
+		stat.setDate(LocalDate.now());
+		stat.setPage(page);
+		stat.setAction(action);
+		return stat;
 	}
 
 	public long getStatId() {
@@ -28,11 +37,11 @@ public class Statistics {
 		this.statId = statId;
 	}
 
-	public Date getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 

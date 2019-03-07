@@ -1,4 +1,4 @@
-package ua.com.javajedi.service;
+package ua.com.javajedi.service.implementation;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ua.com.javajedi.model.User;
+import ua.com.javajedi.service.UserServiceDB;
 
 @Service
 public class UserService implements UserDetailsService{

@@ -9,11 +9,9 @@ import org.springframework.web.servlet.ModelAndView;
 import ua.com.javajedi.model.*;
 import ua.com.javajedi.model.statistics.Action;
 import ua.com.javajedi.model.statistics.Page;
+import ua.com.javajedi.model.statistics.Statistics;
 import ua.com.javajedi.service.IntroService;
 import ua.com.javajedi.service.StatisticsService;
-import ua.com.javajedi.utils.StatUtils;
-
-import java.time.LocalDate;
 
 @Controller
 public class AuthorizationController {
@@ -34,9 +32,8 @@ public class AuthorizationController {
 		ModelAndView mav = new ModelAndView();
 		mav.addObject("articlesCount", introService.findArticlesCount());
 		mav.addObject("exercisesCount", introService.findExercisesCount());
-		mav.addObject("user", new User());
 		mav.setViewName("index");
-		statisticsService.save(StatUtils.createStatistics(Page.INDEX, Action.GET_INDEX));
+		statisticsService.save(Statistics.of(Page.INDEX, Action.GET_INDEX));
 		return mav;
 	}
 
@@ -55,7 +52,14 @@ public class AuthorizationController {
 			mav.addObject("stats", statisticsService.getAllForAdmin());
 		}
 		mav.setViewName("cabinet");
-		statisticsService.save(StatUtils.createStatistics(Page.CABINET, Action.LOGIN));
+		statisticsService.save(Statistics.of(Page.CABINET, Action.LOGIN));
+		return mav;
+	}
+
+	@GetMapping(value = "/logout")
+	@Secured({"USER", "ADMIN"})
+	public ModelAndView logout(final ModelAndView mav){
+		mav.setViewName("index");
 		return mav;
 	}
 }

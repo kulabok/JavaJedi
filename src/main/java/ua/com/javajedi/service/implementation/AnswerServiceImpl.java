@@ -1,4 +1,4 @@
-package ua.com.javajedi.service;
+package ua.com.javajedi.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -6,6 +6,9 @@ import ua.com.javajedi.db.AnswerRepository;
 import ua.com.javajedi.model.Answer;
 import ua.com.javajedi.model.Exercise;
 import ua.com.javajedi.model.User;
+import ua.com.javajedi.service.AnswerService;
+import ua.com.javajedi.service.ExerciseService;
+import ua.com.javajedi.service.UserServiceDB;
 
 import java.util.List;
 import java.util.Objects;
@@ -37,13 +40,13 @@ public class AnswerServiceImpl implements AnswerService {
 
 	@Override
 	public Answer delete(Answer answer) {
-		answerRepository.delete(answer.getAnswerId());
+		answerRepository.delete(answer);
 		return answer;
 	}
 
 	@Override
 	public Answer findById(Answer answer) {
-		return answerRepository.findOne(answer.getAnswerId());
+		return answerRepository.findById(answer.getAnswerId()).get();
 	}
 
 	@Override
