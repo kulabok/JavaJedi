@@ -41,7 +41,7 @@ public class ArticlesController {
 	public ModelAndView findAllArticles(ModelAndView mav) {
 		mav.addObject("articles", articleService.findAll());
 		if (getCurrentUser().getAuthorities().contains(Role.ADMIN)) {
-			mav.addObject("admin", "You are admin!");
+			mav.addObject("stats", statisticsService.getAllForAdmin());
 		}
 		mav.setViewName("cabinet");
 		statisticsService.save(Statistics.of(Page.CABINET, Action.GET_ARTICLES_ALL));

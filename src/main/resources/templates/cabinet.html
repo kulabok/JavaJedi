@@ -175,8 +175,8 @@
         </table>
         <form action="/comments/addComment" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-            <input type="hidden" name="userId" th:value="${user.userId}"/>
-            <input type="hidden" name="articleId" data-th-value="${articleByTitle.articleId}"/>
+            <input type="hidden" name="userId" th:value="${user.id}"/>
+            <input type="hidden" name="articleId" data-th-value="${articleByTitle.id}"/>
             <textarea rows="5" cols="45" maxlength="2000" name="content"> </textarea>
             <input type="submit" value="new Comment"/>
         </form>
@@ -205,7 +205,7 @@
                     <td data-th-text="${answer.content}">Content</td>
 
                 </tr>
-                <input type="hidden" name="exerciseId" data-th-value="${exercise.exerciseId}"/>
+                <input type="hidden" name="exerciseId" data-th-value="${exercise.id}"/>
                 <input type="hidden" name="title" data-th-value="${exercise.title}"/>
 
                 <input type="submit" value="Go!"/>
