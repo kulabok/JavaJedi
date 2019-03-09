@@ -1,6 +1,8 @@
 package ua.com.javajedi.service.implementation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ua.com.javajedi.db.UserRepository;
 import ua.com.javajedi.model.User;
@@ -11,10 +13,12 @@ import java.util.List;
 @Service
 public class UserServiceDBImpl implements UserServiceDB {
 	private final UserRepository userRepository;
+	private final PasswordEncoder encoder;
 
 	@Autowired
-	public UserServiceDBImpl(final UserRepository userRepository) {
+	public UserServiceDBImpl(final UserRepository userRepository, final PasswordEncoder encoder) {
 		this.userRepository = userRepository;
+		this.encoder = encoder;
 	}
 
 	@Override
@@ -24,14 +28,12 @@ public class UserServiceDBImpl implements UserServiceDB {
 
 	@Override
 	public boolean existByEmail(String email) {
-		if (userRepository.findByEmail(email) != null) {
-			return true;
-		}
-		return false;
+		return userRepository.findByEmail(email) != null;
 	}
 
 	@Override
 	public User add(User user) {
+		user.setPassword(encoder.encode(user.getPassword()));
 		return userRepository.saveAndFlush(user);
 	}
 

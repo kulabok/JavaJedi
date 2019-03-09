@@ -2,8 +2,6 @@ package ua.com.javajedi.model;
 
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.security.core.userdetails.UserDetails;
 import ua.com.javajedi.model.comment.ArticleComment;
 import ua.com.javajedi.model.like.ExerciseLike;
@@ -15,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User extends PersistentEntity<Long> implements UserDetails {
 	@Column(unique = true)
 	private String email;

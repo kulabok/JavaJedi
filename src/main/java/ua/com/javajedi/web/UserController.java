@@ -32,8 +32,7 @@ public class UserController {
 	                             @RequestParam String password,
 	                             @RequestParam String aboutMe) {
 		ModelAndView mav = new ModelAndView();
-		User user = new User(username, email, password, aboutMe);
-		user = userServiceDB.add(user);
+		final User user = userServiceDB.add(new User(username, email, password, aboutMe));
 
 		if (user != null) {
 			mav.setViewName("index");

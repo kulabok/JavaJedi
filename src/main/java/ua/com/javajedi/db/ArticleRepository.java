@@ -12,7 +12,7 @@ import java.util.List;
 public interface ArticleRepository extends JpaRepository<Article, Long> {
 	@Query(value =
 		"SELECT * FROM article WHERE NOT id IN " +
-			"(SELECT already_read_id FROM user_already_read WHERE readers_id=?1)", nativeQuery = true)
+			"(SELECT already_read_id FROM users_already_read WHERE readers_id=?1)", nativeQuery = true)
 	List<Article> findAllUnread(@Param("userId") long userId);
 
 	Article findByTitle(String title);
@@ -21,7 +21,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 	long articlesCount();
 
 	@Query(value =
-		"SELECT * FROM article AS l LEFT JOIN user_already_read AS r ON " +
+		"SELECT * FROM article AS l LEFT JOIN users_already_read AS r ON " +
 			"l.id = r.already_read_id WHERE r.readers_id=?1 GROUP BY l.id", nativeQuery = true)
 	List<Article> findAllAlreadyRead(@Param("userId") long userId);
 }

@@ -15,10 +15,10 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
 	Exercise findByTitle(String title);
 
 	@Query(value = "SELECT * FROM exercise WHERE NOT id IN " +
-		"(SELECT already_done_id FROM user_already_done WHERE readers_id = ?1) ", nativeQuery = true)
+		"(SELECT already_done_id FROM users_already_done WHERE readers_id = ?1) ", nativeQuery = true)
 	List<Exercise> findAllUndone(long userId);
 
-	@Query(value = "SELECT * FROM exercise as e left join user_already_done as r ON " +
+	@Query(value = "SELECT * FROM exercise as e left join users_already_done as r ON " +
 		"e.id = r.already_done_id WHERE readers_id = ?1", nativeQuery = true)
 	List<Exercise> findAllDone(long userId);
 

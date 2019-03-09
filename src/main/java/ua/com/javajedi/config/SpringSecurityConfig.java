@@ -14,16 +14,28 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
+import java.awt.dnd.DragSource;
 
 
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 	private final UserDetailsService userDetailsService;
+	private final DataSource dataSource;
 
 	@Autowired
-	public SpringSecurityConfig(final UserDetailsService userDetailsService) {
+	public SpringSecurityConfig(final UserDetailsService userDetailsService, final DataSource dataSource) {
 		this.userDetailsService = userDetailsService;
+		this.dataSource = dataSource;
+	}
+
+	@Autowired
+	public void configAuthentication(AuthenticationManagerBuilder auth, final PasswordEncoder encoder)
+			throws Exception {
+
+		auth.userDetailsService(userDetailsService)
+				.passwordEncoder(encoder);
 	}
 
 	@Override
@@ -40,11 +52,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 			.logout().permitAll().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
 
 	}
-
-	@Bean
-    public PasswordEncoder bcryptPasswordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
